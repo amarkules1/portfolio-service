@@ -10,6 +10,7 @@ requests = "*"
 sqlalchemy = "*"
 psycopg2 = "*"
 flask = "*"
+Flask-Limiter = "*"
 
 [dev-packages]
 

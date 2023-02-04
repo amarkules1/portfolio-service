@@ -6,10 +6,16 @@ import os
 import pandas as pd
 import sqlalchemy
 from sqlalchemy import sql
-
+from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
 
 app = Flask(__name__)
-
+limiter = Limiter(
+    get_remote_address,
+    app=app,
+    default_limits=["300 per hour", "30 per minute"],
+    storage_uri="memory://",
+)
 
 secret_sauce = json.load(open('secret_sauce.json',))
 conn = sqlalchemy.create_engine(secret_sauce['db_conn_string']).connect()
