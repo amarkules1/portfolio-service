@@ -26,7 +26,9 @@ conn = sqlalchemy.create_engine(secret_sauce['db_conn_string']).connect()
 
 @app.route("/projects", methods=['GET'])
 def projects():
+    conn.commit()
     data = pd.read_sql(sql.text("select * from portfolio_projects"), conn)
+    conn.commit()
     data = data.sort_values(['priority', 'created_at'], ascending=[True, False])[['id', 'url', 'title', 'description']]
     return data.to_json(orient="records")
 
