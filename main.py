@@ -12,12 +12,12 @@ from flask_cors import CORS
 
 
 app = Flask(__name__)
-limiter = Limiter(
-    get_remote_address,
-    app=app,
-    default_limits=["300 per hour", "30 per minute"],
-    storage_uri="memory://",
-)
+# limiter = Limiter(
+#     get_remote_address,
+#     app=app,
+#     default_limits=["300 per hour", "30 per minute"],
+#     storage_uri="memory://",
+# )
 CORS(app)
 
 secret_sauce = json.load(open('secret_sauce.json',))
