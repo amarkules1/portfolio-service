@@ -31,8 +31,10 @@ def projects():
 def get_response():
     conn = sqlalchemy.create_engine(secret_sauce['db_conn_string']).connect()
     data = pd.read_sql(sql.text("select * from portfolio_projects"), conn)
+    data['row_number'] = data.reset_index().index
     conn.commit()
-    data = data.sort_values(['priority', 'created_at'], ascending=[True, False])[['id', 'url', 'title', 'description']]
+    data = data.sort_values(['priority', 'created_at'], ascending=[True, False])[['id', 'url', 'title', 'description',
+                                                                                  'row_number']]
     return data.to_json(orient="records")
 
 
