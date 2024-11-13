@@ -34,6 +34,7 @@ def get_response():
     data = pd.read_sql(sql.text("select * from portfolio_projects"), CONN)
     CONN.commit()
     data = data.sort_values(['priority', 'created_at'], ascending=[True, False])[['id', 'url', 'title', 'description']]
+    data['row_number'] = data.reset_index().index
     return data.to_json(orient="records")
 
 
