@@ -21,8 +21,6 @@ CORS(app)
 
 secret_sauce = json.load(open('secret_sauce.json',))
 
-CONN = sqlalchemy.create_engine(secret_sauce['db_conn_string']).connect()
-
 
 @app.route("/projects", methods=['GET'])
 def projects():
@@ -31,8 +29,9 @@ def projects():
 
 @cachetools.cached(cache=cachetools.TTLCache(maxsize=1024, ttl=30))
 def get_response():
-    data = pd.read_sql(sql.text("select * from portfolio_projects"), CONN)
-    CONN.commit()
+    conn = sqlalchemy.create_engine(secret_sauce['db_conn_string']).connect()
+    data = pd.read_sql(sql.text("select * from portfolio_projects"), conn)
+    conn.commit()
     data = data.sort_values(['priority', 'created_at'], ascending=[True, False])[['id', 'url', 'title', 'description']]
     return data.to_json(orient="records")
 
